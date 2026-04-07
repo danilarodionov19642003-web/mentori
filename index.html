@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mentori – твой личный менеджер по работе</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --orange: #FF6D1F;
+    --orange-dark: #e55a0e;
+    --dark: #222222;
+    --dark2: #1a1a1a;
+    --dark3: #2e2e2e;
+    --light: #f5f5f5;
+    --white: #ffffff;
+    --gray: #888888;
+    --gray2: #555555;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--dark);
+    color: var(--white);
+    line-height: 1.6;
+    font-size: 16px;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5%;
+    height: 64px;
+    background: rgba(34,34,34,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .logo {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--white);
+  }
+  .logo span { color: var(--orange); }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 14px;
+    color: rgba(255,255,255,0.65);
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+
+  .nav-cta {
+    background: var(--orange);
+    color: var(--white) !important;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .nav-cta:hover { background: var(--orange-dark) !important; transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 5% 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -200px; left: 50%;
+    transform: translateX(-50%);
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(255,109,31,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,109,31,0.12);
+    border: 1px solid rgba(255,109,31,0.3);
+    color: var(--orange);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: 100px;
+    margin-bottom: 2rem;
+    letter-spacing: 0.5px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+    font-weight: 800;
+    line-height: 1.1;
+    max-width: 820px;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 span { color: var(--orange); }
+
+  .hero p {
+    font-size: 1.15rem;
+    color: rgba(255,255,255,0.6);
+    max-width: 560px;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .btn-primary {
+    background: var(--orange);
+    color: var(--white);
+    padding: 14px 32px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--orange-dark); transform: translateY(-2px); }
+
+  .btn-ghost {
+    background: transparent;
+    color: rgba(255,255,255,0.75);
+    padding: 14px 32px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 15px;
+    border: 1px solid rgba(255,255,255,0.18);
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s, transform 0.15s;
+    display: inline-block;
+  }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.4); color: var(--white); transform: translateY(-2px); }
+
+  /* SECTIONS */
+  section { padding: 100px 5%; }
+  .section-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 1rem;
+  }
+  .section-title {
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+    max-width: 700px;
+  }
+  .section-subtitle {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.55);
+    max-width: 560px;
+    margin-bottom: 3.5rem;
+  }
+
+  /* SERVICES */
+  .services { background: var(--dark2); }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .service-card {
+    background: var(--dark3);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: border-color 0.25s, transform 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--orange);
+    transform: scaleX(0);
+    transition: transform 0.3s;
+  }
+  .service-card:hover { border-color: rgba(255,109,31,0.25); transform: translateY(-4px); }
+  .service-card:hover::before { transform: scaleX(1); }
+
+  .service-icon {
+    width: 48px; height: 48px;
+    background: rgba(255,109,31,0.12);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+    font-size: 22px;
+  }
+
+  .service-card h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+  .service-card p {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.7;
+  }
+
+  /* WHY */
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+    margin-top: 3rem;
+  }
+
+  .why-item {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 1.5rem;
+    transition: background 0.2s;
+  }
+  .why-item:hover { background: rgba(255,109,31,0.05); border-color: rgba(255,109,31,0.15); }
+
+  .why-dot {
+    width: 10px; height: 10px;
+    background: var(--orange);
+    border-radius: 50%;
+    margin-bottom: 1rem;
+  }
+
+  .why-item h4 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .why-item p {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.65;
+  }
+
+  /* PRICING */
+  .pricing { background: var(--dark2); }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+    align-items: start;
+  }
+
+  .pricing-card {
+    background: var(--dark3);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 2rem;
+    transition: transform 0.25s, border-color 0.25s;
+  }
+  .pricing-card:hover { transform: translateY(-4px); }
+
+  .pricing-card.featured {
+    background: var(--orange);
+    border-color: var(--orange);
+  }
+  .pricing-card.featured * { color: var(--white); }
+  .pricing-card.featured .price-period { color: rgba(255,255,255,0.75); }
+  .pricing-card.featured .pricing-feature { color: rgba(255,255,255,0.85); }
+  .pricing-card.featured .pricing-feature::before { color: var(--white); }
+
+  .pricing-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 100px;
+    margin-bottom: 1.25rem;
+  }
+
+  .pricing-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 0.75rem;
+  }
+  .pricing-card.featured .pricing-name { color: rgba(255,255,255,0.8); }
+
+  .price-amount {
+    font-size: 2.6rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+  .price-period {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 1.75rem;
+  }
+
+  .pricing-divider {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 1.5rem;
+  }
+  .pricing-card.featured .pricing-divider { border-color: rgba(255,255,255,0.25); }
+
+  .pricing-features { list-style: none; margin-bottom: 2rem; }
+  .pricing-feature {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.55);
+    padding: 6px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .pricing-feature::before {
+    content: '✓';
+    color: var(--orange);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .btn-pricing {
+    display: block;
+    text-align: center;
+    padding: 13px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 14px;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+  }
+
+  .btn-pricing-dark {
+    background: var(--orange);
+    color: var(--white);
+  }
+  .btn-pricing-dark:hover { background: var(--orange-dark); transform: translateY(-1px); }
+
+  .btn-pricing-white {
+    background: var(--white);
+    color: var(--dark);
+  }
+  .btn-pricing-white:hover { background: #f0f0f0; transform: translateY(-1px); }
+
+  /* FREE AUDIT */
+  .free-audit {
+    background: rgba(255,109,31,0.06);
+    border: 1px solid rgba(255,109,31,0.2);
+    border-radius: 20px;
+    padding: 2rem;
+  }
+  .free-audit-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.25rem;
+  }
+  .free-badge {
+    background: rgba(255,109,31,0.15);
+    color: var(--orange);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 100px;
+    letter-spacing: 0.5px;
+  }
+  .free-audit h3 { font-size: 1.1rem; font-weight: 700; }
+  .free-audit-items { list-style: none; margin-bottom: 1.5rem; }
+  .free-audit-items li {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.6);
+    padding: 5px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .free-audit-items li::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--orange);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* STEPS */
+  .steps-list {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: 3rem;
+    max-width: 780px;
+  }
+
+  .step {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+
+  .step-num {
+    width: 44px; height: 44px;
+    background: var(--orange);
+    color: var(--white);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+
+  .step-content h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+  .step-content p {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.65;
+  }
+
+  /* FAQ */
+  .faq { background: var(--dark2); }
+  .faq-list { max-width: 760px; margin-top: 3rem; }
+
+  .faq-item {
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .faq-q {
+    width: 100%;
+    background: none;
+    border: none;
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: left;
+    padding: 1.25rem 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    transition: color 0.2s;
+  }
+  .faq-q:hover { color: var(--orange); }
+
+  .faq-arrow {
+    font-size: 18px;
+    color: var(--orange);
+    transition: transform 0.25s;
+    flex-shrink: 0;
+  }
+  .faq-item.open .faq-arrow { transform: rotate(45deg); }
+
+  .faq-a {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.75;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.3s;
+  }
+  .faq-item.open .faq-a {
+    max-height: 300px;
+    padding-bottom: 1.25rem;
+  }
+
+  /* FORM */
+  .form-section {
+    background: var(--dark);
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .form-section .section-title { margin: 0 auto 1rem; }
+  .form-section .section-subtitle { margin: 0 auto 2.5rem; }
+
+  form {
+    background: var(--dark3);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: left;
+  }
+
+  .form-group { margin-bottom: 1.25rem; }
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 6px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    padding: 12px 16px;
+    transition: border-color 0.2s;
+    outline: none;
+    resize: none;
+  }
+  input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.25); }
+  input:focus, textarea:focus { border-color: var(--orange); }
+
+  .form-policy {
+    font-size: 12px;
+    color: rgba(255,255,255,0.3);
+    margin-top: 1rem;
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark2);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 2.5rem 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  footer .logo { font-size: 16px; }
+  .footer-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+  .footer-links a {
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--white); }
+  .footer-copy {
+    font-size: 12px;
+    color: rgba(255,255,255,0.25);
+    width: 100%;
+    text-align: center;
+    margin-top: 0.5rem;
+  }
+
+  /* MOBILE */
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    section { padding: 70px 5%; }
+    footer { flex-direction: column; text-align: center; }
+    .footer-links { justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">MENT<span>O</span>RI</div>
+  <ul class="nav-links">
+    <li><a href="#services">Услуги</a></li>
+    <li><a href="#why">Преимущества</a></li>
+    <li><a href="#steps">Этапы</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a class="nav-cta" href="#contact">Оставить заявку</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">Продвижение на Profi.ru и других платформах</div>
+  <h1>Больше заявок.<br>Больше доверия.<br><span>Стабильный поток клиентов.</span></h1>
+  <p>Экспертная работа над профилем, которая приводит к росту заявок и укреплению репутации.</p>
+  <div class="hero-buttons">
+    <a class="btn-primary" href="https://t.me/Mentori_Re?text=Здравствуйте!%20Хотел%20бы%20заказать%20услугу%20продвижения." target="_blank">Получить бесплатный разбор</a>
+    <a class="btn-ghost" href="https://t.me/+exw1PPdeJullODQy" target="_blank">Telegram-канал</a>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="section-label">Что мы делаем</div>
+  <div class="section-title">Наши услуги</div>
+  <div class="section-subtitle">Подберём подходящий формат работы под ваш уровень и цели</div>
+
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">🔍</div>
+      <h3>Полный разбор анкеты / Консультация</h3>
+      <p>Глубокий аудит с конкретным планом действий. Выявляем слабые места, корректируем позиционирование, разрабатываем стратегию получения отзывов.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📊</div>
+      <h3>Тариф "Стабильность"</h3>
+      <p>Для специалистов с готовой анкетой и отзывами. Анализ, корректировка текстов, изучение конкурентов и стратегия получения до 6 отзывов в месяц.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🚀</div>
+      <h3>Тариф "Прорыв"</h3>
+      <p>Для новичков и тех, кто хочет ускоренно выйти в топ. Полный аудит, индивидуальная стратегия роста, до 12 отзывов в месяц.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section id="why">
+  <div class="section-label">Почему мы</div>
+  <div class="section-title">Преимущества работы с Mentori</div>
+  <div class="section-subtitle">Мы берём на себя всё — вы занимаетесь своим делом</div>
+
+  <div class="why-grid">
+    <div class="why-item">
+      <div class="why-dot"></div>
+      <h4>Полное оформление профиля</h4>
+      <p>Оформление, публикации, отклики и шаблоны — делаем сами, без вашего участия.</p>
+    </div>
+    <div class="why-item">
+      <div class="why-dot"></div>
+      <h4>Без шаблонов и «сахара»</h4>
+      <p>Усиливаем реальный профиль, не создаём искусственных впечатлений.</p>
+    </div>
+    <div class="why-item">
+      <div class="why-dot"></div>
+      <h4>Продающее оформление</h4>
+      <p>Приводим профиль в состояние, при котором он начинает работать на вас.</p>
+    </div>
+    <div class="why-item">
+      <div class="why-dot"></div>
+      <h4>Аналитика рынка</h4>
+      <p>Подбираем оптимальные цены и корректируем стратегию под рынок.</p>
+    </div>
+    <div class="why-item">
+      <div class="why-dot"></div>
+      <h4>Умные отклики</h4>
+      <p>Общение с клиентами становится быстрее и эффективнее с готовыми шаблонами.</p>
+    </div>
+    <div class="why-item">
+      <div class="why-dot"></div>
+      <h4>Репутационный фон</h4>
+      <p>Работа с отзывами, ответы на них и исправление низкого рейтинга.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="section-label">Тарифы</div>
+  <div class="section-title">Выберите свой формат</div>
+  <div class="section-subtitle">Три варианта под разные цели и уровень профиля</div>
+
+  <div class="pricing-grid">
+
+    <!-- Free audit card -->
+    <div class="pricing-card">
+      <div class="pricing-name">Бесплатно</div>
+      <div class="price-amount">0 ₽</div>
+      <div class="price-period">разовый разбор</div>
+      <hr class="pricing-divider">
+      <ul class="pricing-features">
+        <li class="pricing-feature">Анализ текущей анкеты</li>
+        <li class="pricing-feature">Позиции конкурентов</li>
+        <li class="pricing-feature">Цены в категории</li>
+        <li class="pricing-feature">Стратегия получения отзывов</li>
+      </ul>
+      <a class="btn-pricing btn-pricing-dark" href="https://t.me/Mentori_Re?text=Здравствуйте!%20Хотел%20бы%20получить%20бесплатный%20разбор." target="_blank">Получить разбор</a>
+    </div>
+
+    <!-- Audit + recs -->
+    <div class="pricing-card">
+      <div class="pricing-name">Разбор + рекомендации</div>
+      <div class="price-amount">1 500 ₽</div>
+      <div class="price-period">разово</div>
+      <hr class="pricing-divider">
+      <ul class="pricing-features">
+        <li class="pricing-feature">Глубокий аудит профиля</li>
+        <li class="pricing-feature">План улучшений по позиции и ценам</li>
+        <li class="pricing-feature">Стратегия получения отзывов</li>
+        <li class="pricing-feature">Рекомендации по оформлению и текстам</li>
+      </ul>
+      <a class="btn-pricing btn-pricing-dark" href="https://t.me/Mentori_Re?text=Здравствуйте!%20Хотел%20бы%20заказать%20разбор%20с%20рекомендациями." target="_blank">Заказать</a>
+    </div>
+
+    <!-- Stability -->
+    <div class="pricing-card featured">
+      <div class="pricing-badge">Популярный</div>
+      <div class="pricing-name">Поддержка профиля</div>
+      <div class="price-amount">8 290 ₽</div>
+      <div class="price-period">в месяц</div>
+      <hr class="pricing-divider">
+      <ul class="pricing-features">
+        <li class="pricing-feature">Стратегия отзывов – до 6 в месяц</li>
+        <li class="pricing-feature">Разбор и корректировка анкеты</li>
+        <li class="pricing-feature">Анализ 3–5 конкурентов</li>
+        <li class="pricing-feature">Анализ цен в категории</li>
+        <li class="pricing-feature">Оформление и перепаковка профиля</li>
+        <li class="pricing-feature">Рекомендации по позиционированию</li>
+      </ul>
+      <a class="btn-pricing btn-pricing-white" href="https://t.me/Mentori_Re?text=Здравствуйте!%20Хотел%20бы%20заказать%20тариф%20Поддержка%20профиля." target="_blank">Выбрать тариф</a>
+    </div>
+
+    <!-- Growth -->
+    <div class="pricing-card">
+      <div class="pricing-name">Развитие профиля</div>
+      <div class="price-amount">15 490 ₽</div>
+      <div class="price-period">в месяц</div>
+      <hr class="pricing-divider">
+      <ul class="pricing-features">
+        <li class="pricing-feature">Стратегия отзывов – до 12 в месяц</li>
+        <li class="pricing-feature">Полный аудит анкеты</li>
+        <li class="pricing-feature">Расширенный анализ конкурентов</li>
+        <li class="pricing-feature">Детальный анализ цен и стратегии чека</li>
+        <li class="pricing-feature">Полная перепаковка профиля</li>
+        <li class="pricing-feature">Индивидуальная стратегия роста</li>
+      </ul>
+      <a class="btn-pricing btn-pricing-dark" href="https://t.me/Mentori_Re?text=Здравствуйте!%20Хотел%20бы%20заказать%20тариф%20Развитие%20профиля." target="_blank">Выбрать тариф</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- STEPS -->
+<section id="steps">
+  <div class="section-label">Как это работает</div>
+  <div class="section-title">Этапы работы</div>
+  <div class="section-subtitle">Понятный процесс от старта до результата</div>
+
+  <div class="steps-list">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h4>Анализ анкеты</h4>
+        <p>Оцениваем сильные и слабые стороны профиля, выявляем точки роста.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h4>Корректировка и оформление</h4>
+        <p>Переупаковываем тексты и визуальную часть профиля для доверия клиентов.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h4>Стратегия отзывов</h4>
+        <p>Разрабатываем план получения реальных отзывов и укрепления репутации.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h4>Рекомендации и поддержка</h4>
+        <p>Даём пошаговые советы для закрепления результата и стабильного потока заявок.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+  <div class="section-label">Вопросы</div>
+  <div class="section-title">Часто спрашивают</div>
+  <div class="faq-list">
+    <div class="faq-item">
+      <button class="faq-q">Как вы повышаете рейтинг? <span class="faq-arrow">+</span></button>
+      <div class="faq-a">За счёт правильного оформления, регулярной активности, корректных ответов на отзывы, грамотных откликов и качественной подачи услуг.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">Как понять, какой тариф выбрать? <span class="faq-arrow">+</span></button>
+      <div class="faq-a">Если у вас уже есть анкета с отзывами — подойдёт тариф «Поддержка профиля». Если вы новичок и хотите ускоренно развить профиль — выбирайте «Развитие профиля».</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">Сколько отзывов вы делаете в месяц? <span class="faq-arrow">+</span></button>
+      <div class="faq-a">В тарифе «Поддержка» — до 6 отзывов, в тарифе «Развитие» — до 12. Это реальные стратегии получения отзывов от клиентов.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">Как быстро я увижу результаты? <span class="faq-arrow">+</span></button>
+      <div class="faq-a">Первые изменения в заявках и доверии клиентов заметны уже после внедрения рекомендаций. Полный эффект зависит от активности и выбранного тарифа.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="form-section">
+    <div class="section-label">Контакт</div>
+    <div class="section-title">Оставить заявку</div>
+    <div class="section-subtitle">С вами свяжется менеджер и подробно разберёт вашу анкету</div>
+
+    <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <div class="form-group">
+        <label for="name">Имя</label>
+        <input type="text" id="name" name="name" placeholder="Как вас зовут?" required>
+      </div>
+      <div class="form-group">
+        <label for="contact">Telegram или телефон</label>
+        <input type="text" id="contact" name="contact" placeholder="@username или +7..." required>
+      </div>
+      <div class="form-group">
+        <label for="message">Расскажите о себе (необязательно)</label>
+        <textarea id="message" name="message" rows="3" placeholder="Ваша специальность, платформа, текущая ситуация..."></textarea>
+      </div>
+      <button type="submit" class="btn-primary" style="width:100%;font-size:15px;padding:15px;">Отправить заявку</button>
+      <p class="form-policy">Нажимая кнопку, вы даёте согласие на обработку персональных данных</p>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">MENT<span>O</span>RI</div>
+  <div class="footer-links">
+    <a href="https://t.me/+exw1PPdeJullODQy" target="_blank">Telegram</a>
+    <a href="https://t.me/Mentori_Re" target="_blank">Написать менеджеру</a>
+    <a href="https://mentori.tilda.ws" target="_blank">Старый сайт</a>
+  </div>
+  <div class="footer-copy">© 2025 Mentori. Все права защищены.</div>
+</footer>
+
+<script>
+  document.querySelectorAll('.faq-q').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.parentElement;
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+</script>
+
+</body>
+</html>
