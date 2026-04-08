@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mentori – продвижение профилей на Profi.ru</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --orange: #CC4A0F;
+  --orange2: #FF6D1F;
+  --dark: #1a1a1a;
+  --light: #f0ebe6;
+  --light2: #e8e0d8;
+  --white: #ffffff;
+  --text: #1a1a1a;
+  --muted: #6b6460;
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', sans-serif; background: var(--light); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+a { color: inherit; text-decoration: none; }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1); }
+.reveal.fl { transform: translateX(-50px); }
+.reveal.fr { transform: translateX(50px); }
+.reveal.fs { transform: scale(0.9); }
+.reveal.on { opacity: 1 !important; transform: none !important; }
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}.d5{transition-delay:.40s}
+
+/* NAV */
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:200;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 5%; height:64px;
+  background:rgba(240,235,230,0.93); backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(0,0,0,0.07);
+}
+.logo { font-size:20px; font-weight:900; letter-spacing:2px; color:var(--dark); }
+.nav-links { display:flex; gap:2rem; list-style:none; }
+.nav-links a { font-size:14px; color:var(--muted); transition:color .2s; font-weight:500; }
+.nav-links a:hover { color:var(--orange); }
+.nav-cta { background:var(--orange); color:var(--white)!important; padding:9px 22px; border-radius:8px; font-weight:700; font-size:14px; transition:all .2s; }
+.nav-cta:hover { background:#b83d09!important; transform:translateY(-1px); }
+
+/* TICKER */
+.ticker-wrap { background:rgba(240,235,230,1); padding:11px 0; overflow:hidden; white-space:nowrap; border-bottom:1px solid rgba(0,0,0,0.06); margin-top:64px; }
+.ticker-track { display:inline-flex; animation:ticker 32s linear infinite; }
+@keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+.ticker-item { display:inline-flex; align-items:center; gap:10px; padding:0 2.5rem; font-size:13px; font-weight:600; color:var(--dark); letter-spacing:.5px; text-transform:uppercase; }
+.ticker-dot { width:5px; height:5px; background:var(--orange); border-radius:50%; flex-shrink:0; }
+
+/* HERO */
+.hero {
+  min-height:calc(100vh - 100px);
+  display:grid; grid-template-columns:1fr 1fr;
+  align-items:center; gap:4rem;
+  padding:80px 5%;
+  background:var(--light);
+  position:relative; overflow:hidden;
+}
+.hero::after { content:''; position:absolute; right:-80px; top:-80px; width:480px; height:480px; background:radial-gradient(circle,rgba(204,74,15,.07) 0%,transparent 70%); pointer-events:none; }
+
+/* word-by-word animation */
+.hero-title { font-size:clamp(2.4rem,4.5vw,3.8rem); font-weight:900; line-height:1.1; color:var(--dark); margin-bottom:1.5rem; }
+.word { display:inline-block; opacity:0; transform:translateY(30px); animation:word-in .6s cubic-bezier(.22,1,.36,1) forwards; }
+@keyframes word-in { to { opacity:1; transform:translateY(0); } }
+.accent-word { color:var(--orange); }
+
+.hero-sub { font-size:1.1rem; color:var(--muted); max-width:460px; margin-bottom:2.5rem; line-height:1.75; opacity:0; animation:fade-up .7s ease .9s forwards; }
+@keyframes fade-up { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:none} }
+.hero-btns { display:flex; gap:1rem; flex-wrap:wrap; opacity:0; animation:fade-up .7s ease 1.05s forwards; }
+
+.btn-primary { background:var(--orange); color:var(--white); padding:14px 30px; border-radius:10px; font-weight:700; font-size:15px; border:none; cursor:pointer; transition:all .2s; display:inline-block; position:relative; overflow:hidden; }
+.btn-primary::before { content:''; position:absolute; top:50%;left:50%; width:0;height:0; background:rgba(255,255,255,.18); border-radius:50%; transform:translate(-50%,-50%); transition:width .5s,height .5s; }
+.btn-primary:hover::before { width:300px;height:300px; }
+.btn-primary:hover { background:#b83d09; transform:translateY(-2px); box-shadow:0 10px 28px rgba(204,74,15,.35); }
+.btn-outline { background:transparent; color:var(--dark); padding:14px 30px; border-radius:10px; font-weight:600; font-size:15px; border:1.5px solid rgba(0,0,0,.18); cursor:pointer; transition:all .2s; display:inline-block; }
+.btn-outline:hover { border-color:var(--orange); color:var(--orange); transform:translateY(-2px); }
+
+/* HERO RIGHT VISUAL */
+.hero-right { opacity:0; animation:fade-up .8s ease .3s forwards; }
+.hero-visual { background:var(--dark); border-radius:28px; padding:2rem; position:relative; overflow:hidden; }
+.hero-visual::before { content:''; position:absolute; top:-60px;right:-60px; width:200px;height:200px; background:radial-gradient(circle,rgba(204,74,15,.22) 0%,transparent 70%); }
+.hero-stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:.85rem; }
+.h-stat { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); border-radius:14px; padding:1.25rem; transition:all .25s; }
+.h-stat:hover { background:rgba(255,255,255,.09); transform:translateY(-3px); }
+.h-stat.big { grid-column:span 2; background:var(--orange); border-color:var(--orange); }
+.h-num { font-size:2.4rem; font-weight:900; color:var(--white); line-height:1; margin-bottom:4px; }
+.h-lbl { font-size:12px; color:rgba(255,255,255,.6); font-weight:500; }
+.h-stat.big .h-lbl { color:rgba(255,255,255,.85); }
+.float-card { position:absolute; bottom:-16px; right:28px; background:var(--white); border-radius:14px; padding:11px 16px; display:flex; align-items:center; gap:10px; box-shadow:0 8px 28px rgba(0,0,0,.14); animation:float 3s ease-in-out infinite; }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+.float-icon { font-size:20px; }
+.float-txt { font-size:13px; font-weight:700; color:var(--dark); }
+.float-sub { font-size:11px; color:var(--muted); }
+
+/* SECTION LABELS */
+.slabel { font-size:11px; font-weight:800; letter-spacing:2.5px; text-transform:uppercase; color:var(--orange); margin-bottom:1rem; }
+.stitle { font-size:clamp(1.8rem,3vw,2.5rem); font-weight:900; line-height:1.15; max-width:680px; color:var(--dark); margin-bottom:1rem; }
+.ssub { font-size:1rem; color:var(--muted); max-width:540px; margin-bottom:3rem; line-height:1.75; }
+
+/* ALGO BLOCK */
+.algo { background:var(--dark); padding:90px 5%; }
+.algo-inner { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; max-width:1100px; }
+.algo .stitle { color:var(--white); }
+.algo .ssub { color:rgba(255,255,255,.5); }
+.algo-stat { display:flex; align-items:center; gap:1rem; margin-bottom:1.25rem; padding:1rem 1.25rem; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); border-radius:14px; transition:all .25s; }
+.algo-stat:hover { background:rgba(255,255,255,.07); transform:translateX(6px); }
+.algo-stat-num { font-size:1.6rem; font-weight:900; color:var(--orange2); min-width:70px; }
+.algo-stat-txt { font-size:.9rem; color:rgba(255,255,255,.65); line-height:1.5; }
+.algo-cards { display:grid; gap:1rem; }
+.algo-card { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); border-radius:16px; padding:1.5rem; display:flex; gap:1rem; align-items:flex-start; transition:all .25s; }
+.algo-card:hover { background:rgba(255,255,255,.07); transform:translateY(-3px); }
+.algo-card-icon { width:42px; height:42px; background:rgba(204,74,15,.18); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+.algo-card h4 { font-size:.95rem; font-weight:700; color:var(--white); margin-bottom:.35rem; }
+.algo-card p { font-size:.83rem; color:rgba(255,255,255,.5); line-height:1.6; }
+.algo-highlight { background:var(--orange); border-radius:16px; padding:1.5rem; display:flex; gap:1rem; align-items:center; }
+.algo-highlight p { font-size:.92rem; color:var(--white); line-height:1.6; }
+.algo-highlight strong { font-weight:800; }
+
+/* SERVICES */
+.services { background:var(--light); padding:90px 5%; }
+.services-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1.25rem; }
+.svc-card { background:var(--white); border:1px solid rgba(0,0,0,.07); border-radius:20px; padding:1.75rem; transition:all .3s; position:relative; overflow:hidden; }
+.svc-card::after { content:''; position:absolute; bottom:0;left:0;right:0; height:3px; background:var(--orange); transform:scaleX(0); transform-origin:left; transition:transform .35s; }
+.svc-card:hover { transform:translateY(-8px); box-shadow:0 20px 40px rgba(0,0,0,.08); }
+.svc-card:hover::after { transform:scaleX(1); }
+.svc-card.new-tag::before { content:'Новинка'; position:absolute; top:16px; right:16px; background:var(--orange); color:var(--white); font-size:10px; font-weight:800; padding:3px 10px; border-radius:100px; letter-spacing:.5px; }
+.svc-icon { width:50px;height:50px; background:rgba(204,74,15,.1); border-radius:14px; display:flex;align-items:center;justify-content:center; font-size:22px; margin-bottom:1.25rem; transition:transform .3s; }
+.svc-card:hover .svc-icon { transform:scale(1.1) rotate(-6deg); }
+.svc-card h3 { font-size:1rem; font-weight:800; margin-bottom:.6rem; color:var(--dark); }
+.svc-card p { font-size:.85rem; color:var(--muted); line-height:1.7; }
+
+/* CASES / разборы */
+.cases { background:var(--white); padding:90px 5%; }
+.cases-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; }
+.case-card { background:var(--light); border:1px solid rgba(0,0,0,.07); border-radius:20px; padding:1.75rem; transition:all .3s; position:relative; overflow:hidden; cursor:default; }
+.case-card:hover { transform:translateY(-6px); box-shadow:0 20px 40px rgba(0,0,0,.07); border-color:rgba(204,74,15,.2); }
+.case-top { display:flex; align-items:center; gap:12px; margin-bottom:1.25rem; }
+.case-avatar { width:48px;height:48px; border-radius:14px; background:var(--orange); display:flex;align-items:center;justify-content:center; font-size:20px; flex-shrink:0; }
+.case-name { font-size:.95rem; font-weight:800; color:var(--dark); }
+.case-niche { font-size:.8rem; color:var(--orange); font-weight:600; }
+.case-city { font-size:.8rem; color:var(--muted); }
+.case-divider { border:none; border-top:1px solid rgba(0,0,0,.08); margin-bottom:1.25rem; }
+.case-problems { list-style:none; margin-bottom:1.25rem; }
+.case-problem { font-size:.83rem; color:var(--muted); padding:4px 0; display:flex;gap:8px;align-items:flex-start; }
+.case-problem::before { content:'✗'; color:#e05555; font-weight:800; flex-shrink:0; margin-top:1px; }
+.case-recs { list-style:none; }
+.case-rec { font-size:.83rem; color:var(--muted); padding:4px 0; display:flex;gap:8px;align-items:flex-start; }
+.case-rec::before { content:'✓'; color:var(--orange); font-weight:800; flex-shrink:0; margin-top:1px; }
+.case-label { font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--muted); margin-bottom:.5rem; }
+
+/* INFOGRAPHIC */
+.infographic { background:var(--light2); padding:90px 5%; }
+.infographic-grid { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; max-width:1100px; }
+.progress-list { display:flex; flex-direction:column; gap:1.5rem; }
+.progress-header { display:flex; justify-content:space-between; margin-bottom:7px; }
+.progress-label { font-size:14px; font-weight:600; color:var(--dark); }
+.progress-val { font-size:14px; font-weight:700; color:var(--orange); }
+.progress-track { height:8px; background:rgba(0,0,0,.08); border-radius:100px; overflow:hidden; }
+.progress-bar { height:100%; background:linear-gradient(90deg,var(--orange),var(--orange2)); border-radius:100px; width:0; transition:width 1.4s cubic-bezier(.22,1,.36,1); }
+.info-cards { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+.info-card { background:var(--white); border:1px solid rgba(0,0,0,.07); border-radius:18px; padding:1.75rem; transition:all .25s; }
+.info-card:hover { transform:translateY(-4px); box-shadow:0 14px 30px rgba(0,0,0,.07); }
+.info-card.orange { background:var(--orange); border-color:var(--orange); grid-column:span 2; }
+.info-num { font-size:2.2rem; font-weight:900; color:var(--dark); line-height:1; margin-bottom:5px; }
+.info-card.orange .info-num { color:var(--white); }
+.info-lbl { font-size:13px; color:var(--muted); }
+.info-card.orange .info-lbl { color:rgba(255,255,255,.8); }
+
+/* WHY */
+.why { background:var(--light); padding:90px 5%; }
+.why-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; }
+.why-item { background:var(--white); border:1px solid rgba(0,0,0,.07); border-radius:16px; padding:1.75rem; transition:all .25s; }
+.why-item:hover { transform:translateY(-5px); box-shadow:0 16px 36px rgba(0,0,0,.07); border-color:rgba(204,74,15,.2); }
+.why-num { font-size:2rem; font-weight:900; color:rgba(204,74,15,.15); margin-bottom:.75rem; line-height:1; }
+.why-item h4 { font-size:.95rem; font-weight:800; margin-bottom:.5rem; }
+.why-item p { font-size:.85rem; color:var(--muted); line-height:1.65; }
+
+/* PRICING */
+.pricing { background:var(--white); padding:90px 5%; }
+.pricing-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1.25rem; align-items:start; }
+.p-card { background:var(--light); border:1.5px solid rgba(0,0,0,.08); border-radius:20px; padding:1.75rem; transition:all .25s; }
+.p-card:hover { transform:translateY(-6px); box-shadow:0 20px 40px rgba(0,0,0,.08); }
+.p-card.feat { background:var(--dark); border-color:var(--dark); }
+.p-card.feat .p-name { color:rgba(255,255,255,.6); }
+.p-card.feat .p-amount { color:var(--white); }
+.p-card.feat .p-period { color:rgba(255,255,255,.4); }
+.p-card.feat .p-feat { color:rgba(255,255,255,.7); }
+.p-card.feat .p-feat::before { color:var(--orange2); }
+.p-card.feat hr { border-color:rgba(255,255,255,.1); }
+.p-badge { display:inline-block; background:var(--orange); color:var(--white); font-size:10px; font-weight:800; letter-spacing:1px; text-transform:uppercase; padding:4px 10px; border-radius:100px; margin-bottom:1rem; }
+.p-name { font-size:.9rem; font-weight:700; color:var(--muted); margin-bottom:.6rem; }
+.p-amount { font-size:2.1rem; font-weight:900; line-height:1; margin-bottom:3px; color:var(--dark); }
+.p-period { font-size:.8rem; color:var(--muted); margin-bottom:1.5rem; }
+.p-divider { border:none; border-top:1px solid rgba(0,0,0,.08); margin-bottom:1.25rem; }
+.p-feats { list-style:none; margin-bottom:1.75rem; }
+.p-feat { font-size:.82rem; color:var(--muted); padding:5px 0; display:flex;gap:8px;align-items:flex-start; }
+.p-feat::before { content:'✓'; color:var(--orange); font-weight:800; flex-shrink:0; margin-top:1px; }
+.p-btn { display:block; text-align:center; padding:12px; border-radius:10px; font-weight:700; font-size:13px; transition:all .2s; cursor:pointer; border:none; }
+.p-btn-org { background:var(--orange); color:var(--white)!important; }
+.p-btn-org:hover { background:#b83d09; transform:translateY(-1px); }
+
+/* STEPS */
+.steps { background:var(--light2); padding:90px 5%; }
+.steps-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1.5rem; position:relative; }
+.steps-grid::before { content:''; position:absolute; top:28px; left:calc(12.5% + 20px); right:calc(12.5% + 20px); height:2px; background:linear-gradient(90deg,var(--orange),var(--orange2)); opacity:.25; }
+.step-card { background:var(--white); border:1px solid rgba(0,0,0,.07); border-radius:18px; padding:1.75rem; text-align:center; transition:all .25s; }
+.step-card:hover { transform:translateY(-6px); box-shadow:0 16px 36px rgba(0,0,0,.08); }
+.step-num-wrap { width:52px;height:52px; background:var(--orange); border-radius:14px; display:flex;align-items:center;justify-content:center; font-size:1.2rem; font-weight:900; color:var(--white); margin:0 auto 1.25rem; transition:transform .3s; }
+.step-card:hover .step-num-wrap { transform:scale(1.1) rotate(-5deg); }
+.step-card h4 { font-size:.95rem; font-weight:800; margin-bottom:.5rem; color:var(--dark); }
+.step-card p { font-size:.83rem; color:var(--muted); line-height:1.65; }
+
+/* FAQ */
+.faq { background:var(--white); padding:90px 5%; }
+.faq-inner { max-width:780px; }
+.faq-item { border-bottom:1px solid rgba(0,0,0,.08); }
+.faq-q { width:100%; background:none; border:none; color:var(--dark); font-family:'Inter',sans-serif; font-size:.95rem; font-weight:700; text-align:left; padding:1.25rem 0; cursor:pointer; display:flex;justify-content:space-between;align-items:center;gap:1rem; transition:color .2s; }
+.faq-q:hover { color:var(--orange); }
+.faq-arrow { font-size:22px; color:var(--orange); transition:transform .3s; flex-shrink:0; }
+.faq-item.open .faq-arrow { transform:rotate(45deg); }
+.faq-a { font-size:.88rem; color:var(--muted); line-height:1.8; max-height:0; overflow:hidden; transition:max-height .4s ease,padding .3s; }
+.faq-item.open .faq-a { max-height:300px; padding-bottom:1.25rem; }
+
+/* CONTACT */
+.contact { background:var(--light); padding:90px 5%; }
+.form-wrap { max-width:640px; margin:0 auto; text-align:center; }
+.form-wrap .stitle,.form-wrap .ssub { margin:0 auto; }
+.form-wrap .ssub { margin-bottom:2.5rem; }
+form { background:var(--white); border:1px solid rgba(0,0,0,.08); border-radius:24px; padding:2.25rem; text-align:left; }
+.form-group { margin-bottom:1.25rem; }
+label { display:block; font-size:13px; font-weight:700; color:var(--muted); margin-bottom:6px; }
+input[type="text"], textarea { width:100%; background:var(--light); border:1.5px solid rgba(0,0,0,.1); border-radius:10px; color:var(--dark); font-family:'Inter',sans-serif; font-size:14px; padding:12px 16px; transition:all .2s; outline:none; resize:none; }
+input::placeholder,textarea::placeholder { color:rgba(0,0,0,.3); }
+input:focus,textarea:focus { border-color:var(--orange); box-shadow:0 0 0 3px rgba(204,74,15,.12); }
+.form-policy { font-size:12px; color:var(--muted); margin-top:1rem; text-align:center; opacity:.6; }
+
+/* FOOTER */
+footer { background:var(--dark); padding:60px 5% 30px; }
+.footer-top { display:grid; grid-template-columns:1.5fr 1fr 1fr; gap:3rem; margin-bottom:3rem; padding-bottom:3rem; border-bottom:1px solid rgba(255,255,255,.08); }
+.footer-logo { font-size:22px; font-weight:900; letter-spacing:2px; color:var(--white); margin-bottom:1rem; }
+.footer-desc { font-size:.88rem; color:rgba(255,255,255,.4); line-height:1.75; max-width:280px; }
+.footer-col-title { font-size:12px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,.35); margin-bottom:1rem; }
+.footer-links-list { list-style:none; display:flex; flex-direction:column; gap:.75rem; }
+.footer-links-list a { font-size:.88rem; color:rgba(255,255,255,.5); transition:color .2s; }
+.footer-links-list a:hover { color:var(--white); }
+.footer-stat-row { display:flex; gap:2rem; margin-top:1.5rem; }
+.footer-stat-num { font-size:1.6rem; font-weight:900; color:var(--white); }
+.footer-stat-lbl { font-size:11px; color:rgba(255,255,255,.35); }
+.footer-bottom { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; }
+.footer-copy { font-size:12px; color:rgba(255,255,255,.2); }
+.footer-tg { display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,.07); color:rgba(255,255,255,.6); font-size:13px; font-weight:600; padding:8px 16px; border-radius:8px; transition:all .2s; }
+.footer-tg:hover { background:rgba(255,255,255,.12); color:var(--white); }
+
+/* CASE TABS & CAROUSEL */
+.case-tab { background:var(--light2); border:1.5px solid rgba(0,0,0,.08); border-radius:100px; padding:9px 20px; font-family:'Inter',sans-serif; font-size:13px; font-weight:700; color:var(--muted); cursor:pointer; transition:all .2s; }
+.case-tab.active { background:var(--orange); color:var(--white); border-color:var(--orange); }
+.case-tab:hover:not(.active) { border-color:var(--orange); color:var(--orange); }
+
+.case-viewer { display:none; }
+.case-viewer.active { display:block; animation:fade-up .4s ease both; }
+
+.case-meta { display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem; padding:1.25rem 1.5rem; background:var(--light); border-radius:16px; border:1px solid rgba(0,0,0,.07); }
+.case-badge { font-size:12px; font-weight:700; padding:5px 12px; border-radius:100px; }
+.case-badge.bad { background:rgba(224,85,85,.1); color:#c0392b; }
+.case-badge.good { background:rgba(39,174,96,.1); color:#1e8449; }
+
+.pdf-carousel { position:relative; background:var(--dark); border-radius:20px; overflow:hidden; }
+.pdf-slides { display:flex; transition:transform .45s cubic-bezier(.22,1,.36,1); }
+.pdf-slide { min-width:100%; position:relative; cursor:zoom-in; }
+.pdf-slide img { width:100%; display:block; max-height:75vh; object-fit:contain; background:var(--dark); }
+.pdf-slide-num { position:absolute; bottom:12px; right:16px; background:rgba(0,0,0,.55); color:rgba(255,255,255,.8); font-size:12px; font-weight:600; padding:4px 10px; border-radius:100px; backdrop-filter:blur(4px); }
+
+.pdf-nav { position:absolute; top:50%; transform:translateY(-50%); background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.2); color:var(--white); font-size:20px; width:44px; height:44px; border-radius:50%; cursor:pointer; display:flex;align-items:center;justify-content:center; transition:all .2s; backdrop-filter:blur(4px); z-index:10; }
+.pdf-nav:hover { background:var(--orange); border-color:var(--orange); }
+.pdf-nav.prev { left:16px; }
+.pdf-nav.next { right:16px; }
+
+.pdf-dots { position:absolute; bottom:16px; left:50%; transform:translateX(-50%); display:flex; gap:6px; z-index:10; }
+.pdf-dot { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.35); cursor:pointer; transition:all .25s; }
+.pdf-dot.active { background:var(--orange); transform:scale(1.25); }
+
+/* LIGHTBOX */
+.lightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,.92); z-index:1000; align-items:center; justify-content:center; }
+.lightbox.open { display:flex; }
+.lightbox img { max-width:90vw; max-height:90vh; object-fit:contain; border-radius:8px; }
+.lb-close { position:absolute; top:20px; right:24px; background:rgba(255,255,255,.1); border:none; color:var(--white); font-size:22px; width:44px; height:44px; border-radius:50%; cursor:pointer; display:flex;align-items:center;justify-content:center; transition:background .2s; }
+.lb-close:hover { background:var(--orange); }
+.lb-nav { position:absolute; top:50%; transform:translateY(-50%); background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); color:var(--white); font-size:22px; width:52px; height:52px; border-radius:50%; cursor:pointer; display:flex;align-items:center;justify-content:center; transition:all .2s; }
+.lb-nav:hover { background:var(--orange); border-color:var(--orange); }
+.lb-prev { left:24px; }
+.lb-next { right:24px; }
+
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;} .hero-right{display:none;}
+  .services-grid,.pricing-grid{grid-template-columns:repeat(2,1fr);}
+  .algo-inner,.infographic-grid{grid-template-columns:1fr;}
+  .cases-grid{grid-template-columns:1fr;}
+  .why-grid{grid-template-columns:repeat(2,1fr);}
+  .steps-grid{grid-template-columns:repeat(2,1fr);} .steps-grid::before{display:none;}
+  .footer-top{grid-template-columns:1fr;}
+}
+@media(max-width:640px){
+  .nav-links{display:none;}
+  .services-grid,.pricing-grid,.why-grid,.steps-grid{grid-template-columns:1fr;}
+  .algo,.services,.cases,.infographic,.why,.pricing,.steps,.faq,.contact{padding:70px 5%;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">MENTORI</div>
+  <ul class="nav-links">
+    <li><a href="#services">Услуги</a></li>
+    <li><a href="#cases">Разборы</a></li>
+    <li><a href="#pricing">Тарифы</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a class="nav-cta" href="#contact">Оставить заявку</a></li>
+  </ul>
+</nav>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <span class="ticker-item"><span class="ticker-dot"></span>Продвижение на Profi.ru</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Рост заявок</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Управление репутацией</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Стратегия отзывов</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Анализ конкурентов</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Перепаковка профиля</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Увеличение среднего чека</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Выход в топ категории</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Продвижение на Profi.ru</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Рост заявок</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Управление репутацией</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Стратегия отзывов</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Анализ конкурентов</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Перепаковка профиля</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Увеличение среднего чека</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Выход в топ категории</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-badge" style="display:inline-flex;align-items:center;gap:8px;background:rgba(204,74,15,.1);border:1px solid rgba(204,74,15,.25);color:var(--orange);font-size:12px;font-weight:700;padding:6px 14px;border-radius:100px;margin-bottom:1.75rem;letter-spacing:.5px;text-transform:uppercase;opacity:0;animation:fade-up .7s ease .1s forwards;">Агентство продвижения профилей</div>
+    <h1 class="hero-title" id="heroTitle"></h1>
+    <p class="hero-sub">Экспертная упаковка и продвижение на Profi.ru. Больше заявок, доверия и стабильного потока клиентов.</p>
+    <div class="hero-btns">
+      <a class="btn-primary" href="https://t.me/Mentori_Re?text=Здравствуйте!%20Хотел%20бы%20заказать%20услугу%20продвижения." target="_blank">Получить бесплатный разбор</a>
+      <a class="btn-outline" href="https://t.me/Mento_ri" target="_blank">Наш Telegram</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-visual">
+      <div class="hero-stat-grid">
+        <div class="h-stat big">
+          <div class="h-num" data-count="312" data-suffix="">0</div>
+          <div class="h-lbl">специалистов уже работают с нами</div>
+        </div>
+        <div class="h-stat">
+          <div class="h-num" data-count="89" data-suffix="%">0</div>
+          <div class="h-lbl">% клиентов видят рост заявок</div>
+        </div>
+        <div class="h-stat">
+          <div class="h-num" data-count="4800" data-suffix="+">0</div>
+          <div class="h-lbl">отзывов получено</div>
+        </div>
+      </div>
+    </div>
+    <div class="float-card">
+      <div class="float-icon">📈</div>
+      <div>
+        <div class="float-txt">+67% заявок</div>
+        <div class="float-sub">средний результат за 30 дней</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section style="background:var(--white);padding:90px 5%;" id="about">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;max-width:1100px;">
+    <div class="reveal fl" style="position:relative;">
+      <img src="photo.jpg" alt="Данил – основатель Mentori" style="width:100%;max-width:420px;aspect-ratio:4/5;object-fit:cover;object-position:top center;border-radius:24px;display:block;position:relative;z-index:1;">
+      <div style="position:absolute;top:18px;left:18px;right:-18px;bottom:-18px;border:2px solid rgba(204,74,15,.25);border-radius:24px;z-index:0;"></div>
+      <div style="position:absolute;bottom:24px;right:-16px;background:var(--orange);color:var(--white);font-size:13px;font-weight:700;padding:10px 16px;border-radius:12px;z-index:2;box-shadow:0 6px 20px rgba(204,74,15,.35);">Основатель Mentori</div>
+    </div>
+    <div>
+      <div class="slabel reveal">О нас</div>
+      <div class="reveal d1" style="font-size:2rem;font-weight:900;margin-bottom:4px;color:var(--dark);">Привет, я Данил</div>
+      <div class="reveal d2" style="color:var(--orange);font-size:1rem;font-weight:700;margin-bottom:1.75rem;">Владелец агентства Mentori</div>
+      <p class="reveal d2" style="font-size:.95rem;color:var(--muted);line-height:1.85;margin-bottom:1rem;">Долгое время мы занимались работой с репутацией на разных платформах, помогали людям выстраивать образ в сети и работать с отзывами. Это работало, но мы понимали, что людям нужно больше.</p>
+      <p class="reveal d3" style="font-size:.95rem;color:var(--muted);line-height:1.85;margin-bottom:1rem;">Сейчас активно работаем на Profi.ru, помогаем специалистам <strong style="color:var(--dark);font-weight:700;">упаковывать профили так, чтобы они продавали</strong>. Идём в сторону полноценного ведения всех платформ, где живёт ваша аудитория.</p>
+      <div class="reveal d4" style="margin-top:1.5rem;background:var(--light);border-left:3px solid var(--orange);padding:1rem 1.25rem;border-radius:0 10px 10px 0;font-size:.92rem;color:var(--muted);line-height:1.75;">
+        <strong style="color:var(--orange);font-weight:700;">Наша цель:</strong> сделать так, чтобы ваш профиль работал на вас, а не просто существовал.
+      </div>
+      <a class="reveal d5" href="https://t.me/Mento_ri" target="_blank" style="margin-top:2rem;display:inline-flex;align-items:center;gap:10px;background:var(--orange);color:var(--white);padding:12px 22px;border-radius:10px;font-weight:700;font-size:14px;transition:all .2s;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 3L1 11l7 3 9-8-7 9 3 7 8-20z"/></svg>
+        Подписаться на канал
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ALGO -->
+<section class="algo" id="algo">
+  <div style="max-width:1100px;">
+    <div class="slabel reveal" style="color:var(--orange2)">Важно знать</div>
+    <div class="stitle reveal d1" style="color:var(--white);">Как Profi.ru решает, кому показывать заказы первым</div>
+    <div class="ssub reveal d2" style="color:rgba(255,255,255,.5);">На платформе есть скрытый показатель — эффективность откликов. Он определяет, видите ли вы заказы раньше конкурентов или последним.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;">
+      <div>
+        <div class="algo-stat reveal d2">
+          <div class="algo-stat-num">1,3–3,6%</div>
+          <div class="algo-stat-txt">Среднее по рынку. Если ваш показатель ниже — система показывает заказы последним</div>
+        </div>
+        <div class="algo-stat reveal d3">
+          <div class="algo-stat-num" style="color:#4ade80">Топ</div>
+          <div class="algo-stat-txt">Высокий показатель = вы видите популярные заказы первым, до конкурентов</div>
+        </div>
+        <div class="algo-cards reveal d3" style="margin-top:1.5rem;">
+          <div class="algo-card"><div class="algo-card-icon">✍️</div><div><h4>Качественные отклики</h4><p>Правильный текст закрывает клиента на диалог ещё до встречи.</p></div></div>
+          <div class="algo-card"><div class="algo-card-icon">⭐</div><div><h4>Отзывы от клиентов</h4><p>Стратегия получения реальных отзывов поднимает позицию в выдаче.</p></div></div>
+          <div class="algo-card"><div class="algo-card-icon">📊</div><div><h4>Постоянная активность</h4><p>Пассивный профиль теряет позиции даже при хорошем рейтинге.</p></div></div>
+        </div>
+        <div class="algo-highlight reveal d4" style="margin-top:1.5rem;">
+          <div style="font-size:22px;flex-shrink:0;">🎯</div>
+          <p>Именно с этим мы и работаем в Mentori — <strong>повышаем эффективность откликов, оформление и репутацию</strong>, чтобы алгоритм работал на вас.</p>
+        </div>
+      </div>
+      <div class="reveal fr" style="display:flex;flex-direction:column;gap:1rem;">
+        <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,.35);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.25rem;">Так это выглядит в профиле</div>
+        <div style="border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.1);">
+          <img src="profi_screen.jpg" alt="Показатель эффективности на Profi.ru" style="width:100%;display:block;">
+        </div>
+        <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:1.25rem;font-size:.85rem;color:rgba(255,255,255,.5);line-height:1.7;">
+          Скриншот из реального профиля клиента. Показатель 1,4% — ниже среднего. После работы с нами он вырос до 3,1% за 3 недели.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="slabel reveal">Что мы делаем</div>
+  <div class="stitle reveal d1">Наши услуги</div>
+  <div class="ssub reveal d2">Подберём подходящий формат под ваш уровень и цели</div>
+  <div class="services-grid">
+    <div class="svc-card reveal d1">
+      <div class="svc-icon">🔍</div>
+      <h3>Разбор анкеты</h3>
+      <p>Глубокий аудит с конкретным планом действий. Выявляем слабые места, корректируем позиционирование и стратегию отзывов.</p>
+    </div>
+    <div class="svc-card reveal d2">
+      <div class="svc-icon">📊</div>
+      <h3>Тариф "Стабильность"</h3>
+      <p>Для специалистов с готовой анкетой. Анализ, корректировка текстов, конкуренты, стратегия до 6 отзывов в месяц.</p>
+    </div>
+    <div class="svc-card reveal d3">
+      <div class="svc-icon">🚀</div>
+      <h3>Тариф "Прорыв"</h3>
+      <p>Для новичков и тех, кто хочет в топ. Полный аудит, индивидуальная стратегия, до 12 отзывов в месяц.</p>
+    </div>
+    <div class="svc-card new-tag reveal d4">
+      <div class="svc-icon">🖥️</div>
+      <h3>Ведение профиля</h3>
+      <p>Мы садимся на ваш профиль, ищем подходящие заказы и пишем отклики от вашего имени. Вы только принимаете клиентов.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CASES -->
+<section class="cases" id="cases">
+  <div class="slabel reveal">Примеры работ</div>
+  <div class="stitle reveal d1">Как выглядит разбор профиля</div>
+  <div class="ssub reveal d2">Мы анализируем каждого клиента индивидуально и даём конкретные рекомендации — не шаблонные советы. Листайте реальные разборы.</div>
+
+  <!-- Client tabs -->
+  <div class="reveal d2" style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:2rem;">
+    <button class="case-tab active" onclick="switchCase(0)">🔧 Замятин — кондиционеры</button>
+    <button class="case-tab" onclick="switchCase(1)">💆 Пашкова — косметология</button>
+    <button class="case-tab" onclick="switchCase(2)">🏗️ Чернов — строительство</button>
+  </div>
+
+  <!-- Case 0: Zamyatin -->
+  <div class="case-viewer active" id="case-0">
+    <div class="case-meta reveal">
+      <div class="case-meta-info">
+        <div style="font-size:1.1rem;font-weight:800;color:var(--dark);">Замятин Иван Васильевич</div>
+        <div style="color:var(--orange);font-weight:600;font-size:.9rem;">Установка кондиционеров · Москва</div>
+        <div style="color:var(--muted);font-size:.85rem;margin-top:4px;">64 отзыва · Рейтинг 4.44 ★ · Опыт 16 лет</div>
+      </div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+        <div class="case-badge bad">1 фото в портфолио</div>
+        <div class="case-badge bad">Конфликтные ответы</div>
+        <div class="case-badge good">64 отзыва</div>
+      </div>
+    </div>
+    <div class="pdf-carousel" id="carousel-0">
+      <div class="pdf-slides">
+        <div class="pdf-slide active"><img src="zamyatin-1.jpg" alt="Разбор Замятин стр.1"><div class="pdf-slide-num">1 / 2</div></div>
+        <div class="pdf-slide"><img src="zamyatin-2.jpg" alt="Разбор Замятин стр.2"><div class="pdf-slide-num">2 / 2</div></div>
+      </div>
+      <button class="pdf-nav prev" onclick="slideCarousel('carousel-0',-1)">&#8592;</button>
+      <button class="pdf-nav next" onclick="slideCarousel('carousel-0',1)">&#8594;</button>
+      <div class="pdf-dots" id="dots-carousel-0">
+        <span class="pdf-dot active" onclick="goSlide('carousel-0',0)"></span>
+        <span class="pdf-dot" onclick="goSlide('carousel-0',1)"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Case 1: Pashkova -->
+  <div class="case-viewer" id="case-1">
+    <div class="case-meta">
+      <div class="case-meta-info">
+        <div style="font-size:1.1rem;font-weight:800;color:var(--dark);">Пашкова Дарья Николаевна</div>
+        <div style="color:var(--orange);font-weight:600;font-size:.9rem;">Косметология · Москва</div>
+        <div style="color:var(--muted);font-size:.85rem;margin-top:4px;">12 отзывов · Рейтинг 5.0 ★</div>
+      </div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+        <div class="case-badge bad">Нет описания</div>
+        <div class="case-badge bad">6 фото без структуры</div>
+        <div class="case-badge good">Рейтинг 5.0</div>
+      </div>
+    </div>
+    <div class="pdf-carousel" id="carousel-1">
+      <div class="pdf-slides">
+        <div class="pdf-slide active"><img src="pashkova-1.jpg" alt="Разбор Пашкова стр.1"><div class="pdf-slide-num">1 / 3</div></div>
+        <div class="pdf-slide"><img src="pashkova-2.jpg" alt="Разбор Пашкова стр.2"><div class="pdf-slide-num">2 / 3</div></div>
+        <div class="pdf-slide"><img src="pashkova-3.jpg" alt="Разбор Пашкова стр.3"><div class="pdf-slide-num">3 / 3</div></div>
+      </div>
+      <button class="pdf-nav prev" onclick="slideCarousel('carousel-1',-1)">&#8592;</button>
+      <button class="pdf-nav next" onclick="slideCarousel('carousel-1',1)">&#8594;</button>
+      <div class="pdf-dots" id="dots-carousel-1">
+        <span class="pdf-dot active" onclick="goSlide('carousel-1',0)"></span>
+        <span class="pdf-dot" onclick="goSlide('carousel-1',1)"></span>
+        <span class="pdf-dot" onclick="goSlide('carousel-1',2)"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Case 2: Chernov -->
+  <div class="case-viewer" id="case-2">
+    <div class="case-meta">
+      <div class="case-meta-info">
+        <div style="font-size:1.1rem;font-weight:800;color:var(--dark);">Чернов Николай Николаевич</div>
+        <div style="color:var(--orange);font-weight:600;font-size:.9rem;">Строительство и ремонт · Москва и область</div>
+        <div style="color:var(--muted);font-size:.85rem;margin-top:4px;">0 отзывов · Опыт 20+ лет</div>
+      </div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+        <div class="case-badge bad">0 отзывов</div>
+        <div class="case-badge bad">Хаотичное описание</div>
+        <div class="case-badge bad">Нет шаблона отклика</div>
+      </div>
+    </div>
+    <div class="pdf-carousel" id="carousel-2">
+      <div class="pdf-slides">
+        <div class="pdf-slide active"><img src="chernov-1.jpg" alt="Разбор Чернов стр.1"><div class="pdf-slide-num">1 / 3</div></div>
+        <div class="pdf-slide"><img src="chernov-2.jpg" alt="Разбор Чернов стр.2"><div class="pdf-slide-num">2 / 3</div></div>
+        <div class="pdf-slide"><img src="chernov-3.jpg" alt="Разбор Чернов стр.3"><div class="pdf-slide-num">3 / 3</div></div>
+      </div>
+      <button class="pdf-nav prev" onclick="slideCarousel('carousel-2',-1)">&#8592;</button>
+      <button class="pdf-nav next" onclick="slideCarousel('carousel-2',1)">&#8594;</button>
+      <div class="pdf-dots" id="dots-carousel-2">
+        <span class="pdf-dot active" onclick="goSlide('carousel-2',0)"></span>
+        <span class="pdf-dot" onclick="goSlide('carousel-2',1)"></span>
+        <span class="pdf-dot" onclick="goSlide('carousel-2',2)"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lb-close" onclick="closeLightbox()">✕</button>
+    <button class="lb-nav lb-prev" onclick="event.stopPropagation();lbNav(-1)">&#8592;</button>
+    <img id="lb-img" src="" alt="">
+    <button class="lb-nav lb-next" onclick="event.stopPropagation();lbNav(1)">&#8594;</button>
+  </div>
+</section>
+
+<!-- INFOGRAPHIC -->
+<section class="infographic" id="why">
+  <div class="infographic-grid">
+    <div>
+      <div class="slabel reveal">Результаты</div>
+      <div class="stitle reveal d1">Что меняется после работы с нами</div>
+      <div class="ssub reveal d2">Средние показатели по клиентам за первые 60 дней</div>
+      <div class="progress-list reveal d3">
+        <div class="progress-item">
+          <div class="progress-header"><span class="progress-label">Рост входящих заявок</span><span class="progress-val">+67%</span></div>
+          <div class="progress-track"><div class="progress-bar" data-width="67"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header"><span class="progress-label">Повышение доверия клиентов</span><span class="progress-val">+82%</span></div>
+          <div class="progress-track"><div class="progress-bar" data-width="82"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header"><span class="progress-label">Рост среднего чека</span><span class="progress-val">+45%</span></div>
+          <div class="progress-track"><div class="progress-bar" data-width="45"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header"><span class="progress-label">Позиция в категории</span><span class="progress-val">Топ 10%</span></div>
+          <div class="progress-track"><div class="progress-bar" data-width="90"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="info-cards reveal fr">
+      <div class="info-card orange">
+        <div class="info-num">2× быстрее</div>
+        <div class="info-lbl">клиенты принимают решение о заказе</div>
+      </div>
+      <div class="info-card">
+        <div class="info-num">Топ 10%</div>
+        <div class="info-lbl">категории достигают клиенты за месяц</div>
+      </div>
+      <div class="info-card">
+        <div class="info-num">×3</div>
+        <div class="info-lbl">конверсия профиля после перепаковки</div>
+      </div>
+      <div class="info-card">
+        <div class="info-num">7 дней</div>
+        <div class="info-lbl">до первых заметных результатов</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="why">
+  <div class="slabel reveal">Преимущества</div>
+  <div class="stitle reveal d1">Почему выбирают Mentori</div>
+  <div class="ssub reveal d2">Мы берём на себя всё – вы занимаетесь своим делом</div>
+  <div class="why-grid">
+    <div class="why-item reveal d1"><div class="why-num">01</div><h4>Полное оформление профиля</h4><p>Оформление, публикации, отклики и шаблоны – делаем сами, без вашего участия.</p></div>
+    <div class="why-item reveal d2"><div class="why-num">02</div><h4>Без шаблонов и «сахара»</h4><p>Усиливаем реальный профиль, не создаём искусственных впечатлений.</p></div>
+    <div class="why-item reveal d3"><div class="why-num">03</div><h4>Продающее оформление</h4><p>Приводим профиль в состояние, при котором он начинает работать на вас.</p></div>
+    <div class="why-item reveal d1"><div class="why-num">04</div><h4>Аналитика рынка</h4><p>Подбираем оптимальные цены и корректируем стратегию под рынок.</p></div>
+    <div class="why-item reveal d2"><div class="why-num">05</div><h4>Постоянная активность</h4><p>Регулярно ведём профиль – алгоритм Profi.ru учитывает активность при ранжировании.</p></div>
+    <div class="why-item reveal d3"><div class="why-num">06</div><h4>Репутационный фон</h4><p>Работа с отзывами, ответы на них и исправление низкого рейтинга.</p></div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="slabel reveal">Тарифы</div>
+  <div class="stitle reveal d1">Выберите свой формат</div>
+  <div class="ssub reveal d2">Четыре варианта под разные цели</div>
+  <div class="pricing-grid">
+    <div class="p-card reveal d1">
+      <div class="p-name">Бесплатно</div>
+      <div class="p-amount">0 ₽</div>
+      <div class="p-period">разовый разбор</div>
+      <hr class="p-divider">
+      <ul class="p-feats">
+        <li class="p-feat">Анализ текущей анкеты</li>
+        <li class="p-feat">Позиции конкурентов</li>
+        <li class="p-feat">Цены в категории</li>
+        <li class="p-feat">Стратегия отзывов</li>
+      </ul>
+      <a class="p-btn p-btn-org" href="https://t.me/Mentori_Re?text=Здравствуйте!%20Хотел%20бы%20получить%20бесплатный%20разбор." target="_blank">Получить разбор</a>
+    </div>
+    <div class="p-card reveal d2">
+      <div class="p-name">Разбор + рекомендации</div>
+      <div class="p-amount">1 500 ₽</div>
+      <div class="p-period">разово</div>
+      <hr class="p-divider">
+      <ul class="p-feats">
+        <li class="p-feat">Глубокий аудит профиля</li>
+        <li class="p-feat">План улучшений</li>
+        <li class="p-feat">Стратегия отзывов</li>
+        <li class="p-feat">Рекомендации по текстам</li>
+      </ul>
+      <a class="p-btn p-btn-org" href="https://t.me/Mentori_Re?text=Здравствуйте!%20Хотел%20бы%20заказать%20разбор." target="_blank">Заказать</a>
+    </div>
+    <div class="p-card feat reveal d3">
+      <div class="p-badge">Популярный</div>
+      <div class="p-name">Поддержка профиля</div>
+      <div class="p-amount">8 290 ₽</div>
+      <div class="p-period">в месяц</div>
+      <hr class="p-divider">
+      <ul class="p-feats">
+        <li class="p-feat">До 6 отзывов в месяц</li>
+        <li class="p-feat">Разбор и корректировка</li>
+        <li class="p-feat">Анализ 3–5 конкурентов</li>
+        <li class="p-feat">Анализ цен в категории</li>
+        <li class="p-feat">Перепаковка профиля</li>
+        <li class="p-feat">Рекомендации</li>
+      </ul>
+      <a class="p-btn p-btn-org" href="https://t.me/Mentori_Re?text=Здравствуйте!%20Хотел%20бы%20заказать%20тариф%20Поддержка." target="_blank">Выбрать тариф</a>
+    </div>
+    <div class="p-card reveal d4">
+      <div class="p-name">Развитие профиля</div>
+      <div class="p-amount">15 490 ₽</div>
+      <div class="p-period">в месяц</div>
+      <hr class="p-divider">
+      <ul class="p-feats">
+        <li class="p-feat">До 12 отзывов в месяц</li>
+        <li class="p-feat">Полный аудит анкеты</li>
+        <li class="p-feat">Расширенный анализ конкурентов</li>
+        <li class="p-feat">Стратегия повышения чека</li>
+        <li class="p-feat">Полная перепаковка</li>
+        <li class="p-feat">Индивидуальная стратегия</li>
+      </ul>
+      <a class="p-btn p-btn-org" href="https://t.me/Mentori_Re?text=Здравствуйте!%20Хотел%20бы%20заказать%20тариф%20Развитие." target="_blank">Выбрать тариф</a>
+    </div>
+  </div>
+</section>
+
+<!-- STEPS -->
+<section class="steps" id="steps">
+  <div class="slabel reveal">Процесс</div>
+  <div class="stitle reveal d1">Этапы работы</div>
+  <div class="ssub reveal d2">От старта до результата</div>
+  <div class="steps-grid">
+    <div class="step-card reveal d1"><div class="step-num-wrap">1</div><h4>Анализ анкеты</h4><p>Оцениваем сильные и слабые стороны профиля, выявляем точки роста.</p></div>
+    <div class="step-card reveal d2"><div class="step-num-wrap">2</div><h4>Корректировка</h4><p>Переупаковываем тексты и визуальную часть для доверия клиентов.</p></div>
+    <div class="step-card reveal d3"><div class="step-num-wrap">3</div><h4>Стратегия отзывов</h4><p>Разрабатываем план получения реальных отзывов и укрепления репутации.</p></div>
+    <div class="step-card reveal d4"><div class="step-num-wrap">4</div><h4>Поддержка</h4><p>Даём советы для закрепления результата и стабильного потока заявок.</p></div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+  <div class="slabel reveal">Вопросы</div>
+  <div class="stitle reveal d1">Часто спрашивают</div>
+  <div class="faq-inner reveal d2">
+    <div class="faq-item"><button class="faq-q">Как вы повышаете рейтинг? <span class="faq-arrow">+</span></button><div class="faq-a">За счёт правильного оформления, регулярной активности, корректных ответов на отзывы, грамотных откликов и качественной подачи услуг.</div></div>
+    <div class="faq-item"><button class="faq-q">Что такое ведение профиля? <span class="faq-arrow">+</span></button><div class="faq-a">Мы получаем доступ к вашему профилю на Profi.ru, ищем подходящие заказы и пишем отклики от вашего имени. Вы занимаетесь своей работой, мы привлекаем клиентов.</div></div>
+    <div class="faq-item"><button class="faq-q">Как понять, какой тариф выбрать? <span class="faq-arrow">+</span></button><div class="faq-a">Если у вас уже есть анкета с отзывами – «Поддержка профиля». Если вы новичок – «Развитие профиля». Напишите нам, поможем разобраться.</div></div>
+    <div class="faq-item"><button class="faq-q">Как быстро я увижу результаты? <span class="faq-arrow">+</span></button><div class="faq-a">Первые изменения заметны уже через 7 дней после внедрения рекомендаций. Полный эффект зависит от активности и тарифа.</div></div>
+    <div class="faq-item"><button class="faq-q">Влияет ли активность на Profi.ru на позицию профиля? <span class="faq-arrow">+</span></button><div class="faq-a">Да. Алгоритм учитывает эффективность откликов — процент, который привёл к договорённости. Чем он выше, тем раньше вы видите популярные заказы. Именно поэтому важно вести профиль регулярно.</div></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="form-wrap">
+    <div class="slabel reveal">Контакт</div>
+    <div class="stitle reveal d1">Оставить заявку</div>
+    <div class="ssub reveal d2">С вами свяжется менеджер и подробно разберёт вашу анкету</div>
+    <form action="https://formspree.io/f/mjgpzkwa" method="POST" class="reveal d3">
+      <div class="form-group"><label for="name">Имя</label><input type="text" id="name" name="name" placeholder="Как вас зовут?" required></div>
+      <div class="form-group"><label for="cnt">Telegram или телефон</label><input type="text" id="cnt" name="contact" placeholder="@username или +7..." required></div>
+      <div class="form-group"><label for="msg">О себе (необязательно)</label><textarea id="msg" name="message" rows="3" placeholder="Специальность, платформа, текущая ситуация..."></textarea></div>
+      <button type="submit" class="btn-primary" style="width:100%;font-size:15px;padding:15px;border-radius:12px;">Отправить заявку</button>
+      <p class="form-policy">Нажимая кнопку, вы даёте согласие на обработку персональных данных</p>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-logo">MENTORI</div>
+      <div class="footer-desc">Агентство продвижения профилей на Profi.ru и других платформах. Помогаем специалистам получать больше заявок.</div>
+      <div class="footer-stat-row">
+        <div><div class="footer-stat-num">312</div><div class="footer-stat-lbl">клиентов с нами</div></div>
+        <div><div class="footer-stat-num">4 800+</div><div class="footer-stat-lbl">отзывов получено</div></div>
+        <div><div class="footer-stat-num">89%</div><div class="footer-stat-lbl">видят рост заявок</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Услуги</div>
+      <ul class="footer-links-list">
+        <li><a href="#services">Разбор анкеты</a></li>
+        <li><a href="#services">Поддержка профиля</a></li>
+        <li><a href="#services">Развитие профиля</a></li>
+        <li><a href="#services">Ведение профиля</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Контакты</div>
+      <ul class="footer-links-list">
+        <li><a href="https://t.me/Mento_ri" target="_blank">Telegram-канал</a></li>
+        <li><a href="https://t.me/Mentori_Re" target="_blank">Написать менеджеру</a></li>
+        <li><a href="#contact">Оставить заявку</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 Mentori. Все права защищены.</div>
+    <a class="footer-tg" href="https://t.me/Mento_ri" target="_blank">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 3L1 11l7 3 9-8-7 9 3 7 8-20z"/></svg>
+      Подписаться на канал
+    </a>
+  </div>
+</footer>
+
+<script>
+// Hero title word-by-word animation
+const words = ['Ваш ','профиль ','должен ','работать ','на вас'];
+const colors = [false,false,false,false,true];
+const title = document.getElementById('heroTitle');
+words.forEach((w,i) => {
+  const span = document.createElement('span');
+  span.className = 'word' + (colors[i] ? ' accent-word' : '');
+  span.innerHTML = w.replace(/ /g, '&nbsp;') + ' ';
+  span.style.animationDelay = (0.15 + i * 0.12) + 's';
+  title.appendChild(span);
+});
+
+// FAQ
+document.querySelectorAll('.faq-q').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  });
+});
+
+// Scroll reveal
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('on');
+      e.target.querySelectorAll('.progress-bar').forEach(b => { b.style.width = b.dataset.width + '%'; });
+      e.target.querySelectorAll('[data-count]').forEach(el => animCount(el));
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// Trigger progress bars on section
+const progObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.querySelectorAll('.progress-bar').forEach(b => { b.style.width = b.dataset.width + '%'; }); });
+}, {threshold:.2});
+document.querySelectorAll('.infographic').forEach(el => progObs.observe(el));
+
+// Counter
+function animCount(el) {
+  const target = +el.dataset.count;
+  const suffix = el.dataset.suffix !== undefined ? el.dataset.suffix : (target >= 1000 ? '+' : target > 30 ? '%' : '');
+  let cur = 0; const step = target/60;
+  const t = setInterval(() => {
+    cur += step;
+    if(cur >= target){ cur = target; clearInterval(t); }
+    el.textContent = Math.floor(cur).toLocaleString('ru') + suffix;
+  }, 20);
+}
+// Case tabs
+function switchCase(idx) {
+  document.querySelectorAll('.case-viewer').forEach((v,i) => v.classList.toggle('active', i===idx));
+  document.querySelectorAll('.case-tab').forEach((t,i) => t.classList.toggle('active', i===idx));
+}
+
+// Carousel
+const carouselState = {};
+function getCarState(id) {
+  if (!carouselState[id]) carouselState[id] = { cur: 0 };
+  return carouselState[id];
+}
+function updateCarousel(id) {
+  const car = document.getElementById(id);
+  const slides = car.querySelectorAll('.pdf-slide');
+  const dots = document.querySelectorAll('#dots-' + id + ' .pdf-dot');
+  const state = getCarState(id);
+  car.querySelector('.pdf-slides').style.transform = `translateX(-${state.cur * 100}%)`;
+  slides.forEach((s,i) => s.classList.toggle('active', i===state.cur));
+  dots.forEach((d,i) => d.classList.toggle('active', i===state.cur));
+}
+function slideCarousel(id, dir) {
+  const car = document.getElementById(id);
+  const total = car.querySelectorAll('.pdf-slide').length;
+  const state = getCarState(id);
+  state.cur = (state.cur + dir + total) % total;
+  updateCarousel(id);
+}
+function goSlide(id, idx) {
+  getCarState(id).cur = idx;
+  updateCarousel(id);
+}
+
+// Lightbox
+let lbImages = [], lbCur = 0;
+function openLightbox(src, images, idx) {
+  lbImages = images; lbCur = idx;
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function lbNav(dir) {
+  lbCur = (lbCur + dir + lbImages.length) % lbImages.length;
+  document.getElementById('lb-img').src = lbImages[lbCur];
+}
+
+// Make slides clickable to open lightbox
+document.querySelectorAll('.pdf-carousel').forEach(car => {
+  const id = car.id;
+  const imgs = Array.from(car.querySelectorAll('.pdf-slide img')).map(i => i.src);
+  car.querySelectorAll('.pdf-slide').forEach((slide, idx) => {
+    slide.addEventListener('click', () => openLightbox(imgs[idx], imgs, idx));
+  });
+});
+
+window.addEventListener('load', () => { setTimeout(() => { document.querySelectorAll('.hero-visual [data-count]').forEach(el => animCount(el)); }, 800); });
+</script>
+</body>
+</html>
